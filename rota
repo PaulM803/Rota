@@ -1,0 +1,54 @@
+#1 Faire tourner une image de x degrés
+
+from PIL import Image
+
+im = Image.open("cercle_trigo.jpg")
+im = im.rotate(45)
+im.show()
+
+#2 Créer 2 vecteurs et mesurer l'angle de (u,v)
+
+import numpy as np
+from math import *
+
+u = np.array([1,1])
+v = np.array([-1,-1])
+
+def mesur_angle (u,v):
+    scalaire= np.vdot(u,v)
+    norme_u= np.linalg.norm(u) #norme u
+    norme_v= np.linalg.norm(v) #norme v
+    angle_mesuré =(acos((scalaire/(norme_u*norme_v))))/(3.1415/180)
+    return angle_mesuré
+
+
+#3 Faire tourner v pour réduire à 0 l'angle fait avec u
+
+def correction(u,v):
+    global a
+    theta = np.radians(0.1)
+    r = np.array(( (np.cos(theta), -np.sin(theta)),      #Matrice de rotation
+                   (np.sin(theta),  np.cos(theta)) ))
+    a=mesur_angle(u,v)
+    while a>0.2: #Tant que angle>0.2, faire des rota de 0.1 deg
+        v=r@v
+        scalaire= np.vdot(u,v)
+        norme_u=n = np.linalg.norm(u)
+        norme_v=n = np.linalg.norm(v)
+        angle =(acos((scalaire/(norme_u*norme_v))))/(3.1415/180)
+        a=mesur_angle(u,v)
+    return v
+
+#Lien entre les codes :
+
+u = np.array([1,1])
+v = np.array([0,-1])
+
+angle_début=mesur_angle(u,v)
+print(angle_début)
+
+v_modifié=correction(u,v)
+print(v_modifié)
+
+angle_fin=np.array([0,0])
+angle_fin=mesur_angle(u,v_modifié)
